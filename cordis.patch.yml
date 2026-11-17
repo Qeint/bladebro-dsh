@@ -1,0 +1,8 @@
+# Bladebro bundle patch: mounts this package as a plugin row named
+# "bladebro" in any profile that lists this bundle. Composes cleanly
+# alongside @dsh-external/donsetch in the same profile.
+- insert:
+    - id: bladebro
+      name: '@dsh-external/bladebro'
+      config:
+        toolPrefix: bladebro

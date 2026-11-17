@@ -1,0 +1,45 @@
+{
+  "name": "@dsh-external/bladebro",
+  "version": "1.0.0",
+  "description": "First-class Bladebro browser driver for DeepSeek Harness: act, see, state, run, and vision as native dsh tools with real stealth, token efficiency, and an auto-updating verified binary.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "cordis.patch.yml"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "lint": "node scripts/no-em-dash.mjs",
+    "pack-check": "npm run build && node scripts/pack-check.mjs",
+    "live": "npm run build && node scripts/live-test.mjs"
+  },
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2",
+    "@deepseek-ai/dsh-tools": "^0.1.2-rc.1",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "bladebro",
+    "deepseek-harness",
+    "browser",
+    "cdp",
+    "stealth",
+    "mcp",
+    "agent"
+  ],
+  "license": "Apache-2.0",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}
