@@ -20,6 +20,9 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      - uses: browser-actions/setup-chrome@v1
+        if: runner.os == 'Linux'
+        id: chrome
       - run: npm install --no-audit --no-fund
       - run: npm run typecheck
       - run: npm run lint
@@ -35,3 +38,5 @@ jobs:
           BLADEBRO_BIN="$BLADEBRO_BIN" node --test --test-concurrency=1 test/real-registry.test.mjs
         env:
           BLADEBRO_DSH_AUTOUPDATE: off
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          BLADE_CHROME_FLAGS: --no-sandbox

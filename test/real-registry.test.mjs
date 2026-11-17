@@ -117,7 +117,7 @@ if (!BIN || !existsSync(BIN)) {
       // 4. Inspect XHR endpoint via new logs=xhr!
       const xhr = await ctx.tools.execute({
         name: 'bladebro_see',
-        arguments: { logs: 'xhr' },
+        arguments: { logs: 'network' },
         signal: new AbortController().signal,
       })
       const xhrText = (xhr.content ?? []).map((b) => b.text ?? '').join(' ')

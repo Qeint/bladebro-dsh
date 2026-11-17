@@ -45,7 +45,7 @@ async function main() {
       }
     }
     const nav = await client.callTool('act', { action: 'navigate', url })
-    if (nav.isError === true) throw new Error('LIVE FAIL: act navigate returned isError')
+    if (nav.isError === true) throw new Error('LIVE FAIL: act navigate returned isError: ' + JSON.stringify(nav.content))
     const see = await client.callTool('see', { mode: 'content' })
     if (see.isError === true) throw new Error('LIVE FAIL: see content returned isError')
     const text = (see.content ?? []).map((b) => (typeof b.text === 'string' ? b.text : '')).join('')

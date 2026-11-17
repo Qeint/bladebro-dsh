@@ -1,23 +1,24 @@
-/**
- * Structural verification of the packed tarball: what a `dsh plugin
- * add` (pnpm git/tarball install) will resolve. Checks the manifest's
- * dsh.bundle declaration, the patch file it points at, that every
- * `files` entry exists, and that the entry module exports the plugin
- * contract (name + apply).
- */
-import { execFileSync } from 'node:child_process'
+import { execFileSync, spawnSync } from 'node:child_process'
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 const root = join(import.meta.dirname, '..')
 const dir = mkdtempSync(join(tmpdir(), 'bladebro-pack-'))
-let out
 try {
-  execFileSync('npm', ['pack', '--pack-destination', dir, '--json'], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] })
+  const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm'
+  const packRes = spawnSync(npmCmd, ['pack', '--pack-destination', dir, '--json'], {
+    cwd: root,
+    encoding: 'utf8',
+    shell: process.platform === 'win32',
+  })
+  if (packRes.status !== 0) {
+    throw new Error(`npm pack failed: ${packRes.stderr || packRes.stdout || packRes.error?.message}`)
+  }
   const tgz = readdirSync(dir).find((f) => f.endsWith('.tgz'))
   if (!tgz) throw new Error('npm pack produced no tarball')
-  out = join(dir, 'out')
+  const out = join(dir, 'out')
   mkdirSync(out, { recursive: true })
   execFileSync('tar', ['-xzf', join(dir, tgz), '-C', out])
 
@@ -35,7 +36,7 @@ try {
   }
   const mainEntry = (pkg.main ?? './dist/index.js').replace(/^\.\//, '')
   if (!existsSync(join(out, 'package', mainEntry))) throw new Error(`main entry ${mainEntry} missing from tarball`)
-  const mod = await import('file://' + join(out, 'package', mainEntry))
+  const mod = await import(pathToFileURL(join(out, 'package', mainEntry)).href)
   if (typeof mod.apply !== 'function' || typeof mod.name !== 'string') {
     throw new Error('entry module does not export { name, apply }')
   }
