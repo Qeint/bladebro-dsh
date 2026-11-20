@@ -11,7 +11,7 @@ export declare const PLUGIN_VERSION = "1.0.0";
  * the floor, not a ceiling. Bump on bladebro patch releases when the
  * plugin wants a newer baseline.
  */
-export declare const PINNED_BLADEBRO_VERSION = "4.6.10";
+export declare const PINNED_BLADEBRO_VERSION = "4.7.0";
 export interface Semver {
     major: number;
     minor: number;
