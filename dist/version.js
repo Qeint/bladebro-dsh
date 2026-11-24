@@ -11,7 +11,7 @@ export const PLUGIN_VERSION = '1.0.0';
  * the floor, not a ceiling. Bump on bladebro patch releases when the
  * plugin wants a newer baseline.
  */
-export const PINNED_BLADEBRO_VERSION = '4.8.3';
+export const PINNED_BLADEBRO_VERSION = '4.8.4';
 /** All-numeric characters, base-independent digit check. */
 function isDigit(ch) {
     return ch >= '0' && ch <= '9';
